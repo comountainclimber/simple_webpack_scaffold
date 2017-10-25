@@ -11,6 +11,11 @@
 *.tgz
 *.xml
 .DS_Store
+
 .node_modules
 npm-debug.log
 npm-debug.log.*
+
+
+node_modules
+
