@@ -41,12 +41,12 @@ module.exports = {
         })
       },
       {
-        test: /\.(png|jpg|gif)$/,
-        loader: 'url-loader?limit=10000&name=[name].[ext]'
+        test: /\.(png|jpg|gif|ico)$/,
+        loader: 'file-loader?limit=10000&name=[name].[ext]'
       },
       {
         test: /\.woff|\.woff2|\.svg|\.eot|\.ttf/,
-        loader: 'url-loader?prefix=font/&limit=10000&name=[name].[ext]'
+        loader: 'file-loader?prefix=font/&limit=10000&name=[name].[ext]'
       }
     ]
   },
