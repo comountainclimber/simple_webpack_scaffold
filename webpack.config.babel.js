@@ -1,7 +1,7 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CleanPlugin from 'clean-webpack-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 module.exports = {
   entry: {
@@ -9,7 +9,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'motili-widget.js'
+    filename: 'index.[hash].js'
   },
   module: {
     rules: [
@@ -26,18 +26,27 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          { loader: 'style-loader' },
-          { loader: 'css-loader' }
-        ]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            { loader: 'css-loader', options: { importLoaders: 1 } },
+            {
+              loader: 'postcss-loader',
+              options: {
+                ident: 'postcss',
+                plugins: () => [require('autoprefixer')({ browsers: ['> 5%'] })]
+              }
+            }
+          ]
+        })
       },
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'url-loader?limit=10000'
+        loader: 'url-loader?limit=10000&name=[name].[ext]'
       },
       {
         test: /\.woff|\.woff2|\.svg|\.eot|\.ttf/,
-        loader: 'url-loader?prefix=font/&limit=10000'
+        loader: 'url-loader?prefix=font/&limit=10000&name=[name].[ext]'
       }
     ]
   },
@@ -45,23 +54,12 @@ module.exports = {
     contentBase: path.resolve(__dirname, 'dist')
   },
   plugins: [
+    new ExtractTextPlugin('styles.[hash].css'),
     new CleanPlugin(['dist']),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      inject: false,
+      inject: 'head',
       filename: 'index.html'
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: 'assets',
-        to: 'assets',
-        context: `${__dirname}/src`
-      }
-    ]),
-    // new UglifyJSPlugin({ uglifyOptions: {
-    //   compress: true,
-    //   minimize: true
-    // }}),
-    // new webpack.DefinePlugin({WP_ENVIRONMENT: JSON.stringify(process.env.NODE_ENV)}),
+    })
   ]
 };

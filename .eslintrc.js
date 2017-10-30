@@ -5,7 +5,9 @@ module.exports = {
     },
     "extends": "airbnb-base",
     "globals": {
-        "WP_ENVIRONMENT": true
+        "WP_ENVIRONMENT": true,
+        "$": true,
+        "_": true
     },
     //"installedESLint": true,
     "parserOptions": {
@@ -13,9 +15,11 @@ module.exports = {
             "experimentalObjectRestSpread": false,
             "jsx": false
         },
-        "sourceType": "module"
+        "sourceType": "module",
     },
     "rules": {
+        "space-before-function-paren": [0],
+        "no-console": "warn",
         "global-require": [0],
         "no-underscore-dangle": [0],
         "strict": [0],
